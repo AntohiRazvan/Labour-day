@@ -1,2 +1,5 @@
-Temp
-obj
+Library/
+Temp/
+Obj/
+*.sln
+*.csproj
