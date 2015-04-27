@@ -104,7 +104,7 @@ public class BlockPlacer : MonoBehaviour
 		{
 			currentObject = directionalWheelPrefab;
 		}
-		if (GUI.Button(new Rect(800,400 , 100, 100), "Ready!"))
+		if (GUI.Button(new Rect(0, 300, 100, 100), "Ready!"))
 		{
 			DontDestroyOnLoad(vehicle);
 			Application.LoadLevel("game");

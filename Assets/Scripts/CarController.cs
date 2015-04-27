@@ -14,12 +14,14 @@ public class CarController : MonoBehaviour
 	Rigidbody rigidbody;
 	List<WheelCollider> directionalWheels;
 	List<WheelCollider> Wheels;
+	List<GameObject> WheelMeshes;
 
 	void Start () 
 	{
 		rigidbody = GetComponent<Rigidbody>();
 		directionalWheels = new List<WheelCollider>();
 		Wheels = new List<WheelCollider>();
+		WheelMeshes = new List<GameObject>();
 		var wheels = GetComponentsInChildren<WheelCollider>();
 		foreach (var wheel in wheels)
 		{
@@ -28,6 +30,7 @@ public class CarController : MonoBehaviour
 				directionalWheels.Add(wheel);
 			}
 			Wheels.Add(wheel);
+			WheelMeshes.Add(wheel.transform.parent.GetComponentInChildren<MeshRenderer>().gameObject);
 		}
 	}
 	
@@ -36,14 +39,18 @@ public class CarController : MonoBehaviour
 		float verticalInput = Input.GetAxis("Vertical");
 		float horizontalInput = Input.GetAxis("Horizontal");
 
-		foreach (var wheel in Wheels)
+		for (int i = 0; i < Wheels.Count; i++)
 		{
-			wheel.brakeTorque = 0;
+			Wheels[i].brakeTorque = 0;
 			if(Input.GetKey(KeyCode.Space))
 			{
-				wheel.brakeTorque = brakeTorque;
+				Wheels[i].brakeTorque = brakeTorque;
 			}
-			wheel.motorTorque = verticalInput * motorTorque;
+			Wheels[i].motorTorque = verticalInput * motorTorque;
+			Vector3 position;
+			Quaternion rotation;
+			Wheels[i].GetWorldPose(out position, out rotation);
+			WheelMeshes[i].transform.rotation = rotation;
 		}
 
 		foreach(var wheel in directionalWheels)
