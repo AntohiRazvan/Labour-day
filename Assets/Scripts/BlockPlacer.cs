@@ -6,15 +6,17 @@ public class BlockPlacer : MonoBehaviour
 	[SerializeField]
 	GameObject blockPrefab;
 	[SerializeField]
-	GameObject wheelPrefab;
+	GameObject directionalWheelPrefab;
+	[SerializeField]
+	GameObject staticWheelPrefab;
 	GameObject currentObject;
 	GameObject vehicle;
 	float blockSize;
 
 	void Start () 
 	{
-		vehicle = GameObject.FindGameObjectWithTag("Vehicle");
-		currentObject = wheelPrefab;
+		vehicle = GameObject.FindGameObjectWithTag("Player");
+		currentObject = blockPrefab;
 		blockSize = blockPrefab.transform.localScale.x;
 	}
 	
@@ -33,8 +35,9 @@ public class BlockPlacer : MonoBehaviour
 					{
 						GameObject go = (GameObject)Instantiate(currentObject, buildPosition, Quaternion.identity);
 						go.transform.parent = vehicle.transform;
-						if (currentObject.name == "Wheel")
+						if (currentObject.name.ToLower().Contains("wheel"))
 						{
+							go.transform.LookAt(hitInfo.collider.gameObject.transform);
 						}
 					}
 				}
@@ -85,5 +88,26 @@ public class BlockPlacer : MonoBehaviour
 		if (Physics.OverlapSphere(ret, 0.2f).Length > 0)
 			return Vector3.zero;
 		return ret;
+	}
+
+	void OnGUI()
+	{
+		if (GUI.Button(new Rect(0, 0, 100, 100), "Block!"))
+		{
+			currentObject = blockPrefab;
+		}
+		if (GUI.Button(new Rect(0, 100, 100, 100), "Static Wheel"))
+		{
+			currentObject = staticWheelPrefab;
+		}
+		if (GUI.Button(new Rect(0, 200, 100, 100), "Directional Wheel"))
+		{
+			currentObject = directionalWheelPrefab;
+		}
+		if (GUI.Button(new Rect(800,400 , 100, 100), "Ready!"))
+		{
+			DontDestroyOnLoad(vehicle);
+			Application.LoadLevel("game");
+		}
 	}
 }

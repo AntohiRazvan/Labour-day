@@ -26,10 +26,15 @@ public class CameraFollow : MonoBehaviour
 	private Vector3 position = Vector3.zero;
    private Transform target; 
  
- 
 	void Start() 
 	{
 		target = GameObject.FindGameObjectWithTag("Player").transform;
+		target.gameObject.GetComponent<Rigidbody>().useGravity = true;
+		target.gameObject.GetComponent<CarController>().enabled = true;
+		foreach(SphereCollider sc in target.gameObject.GetComponentsInChildren<SphereCollider>())
+		{
+			sc.enabled = false;
+		}
 		Distance = Mathf.Clamp(Distance, DistanceMin, DistanceMax);
 		startingDistance = Distance;
 		Reset();
