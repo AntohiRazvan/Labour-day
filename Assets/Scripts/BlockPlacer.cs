@@ -33,11 +33,21 @@ public class BlockPlacer : MonoBehaviour
 					Vector3 buildPosition = getBuildPosition(hitInfo.collider.gameObject.transform.position, hitInfo.point);
 					if (buildPosition != Vector3.zero)
 					{
-						GameObject go = (GameObject)Instantiate(currentObject, buildPosition, Quaternion.identity);
-						go.transform.parent = vehicle.transform;
-						if (currentObject.name.ToLower().Contains("wheel"))
+						if (currentObject == null) 
 						{
-							go.transform.LookAt(hitInfo.collider.gameObject.transform);
+							if (hitInfo.collider.gameObject.name != "Root")
+							{
+								Destroy(hitInfo.collider.gameObject);
+							}
+						}
+						else
+						{
+							GameObject go = (GameObject)Instantiate(currentObject, buildPosition, Quaternion.identity);
+							go.transform.parent = vehicle.transform;
+							if (currentObject.name.ToLower().Contains("wheel"))
+							{
+								go.transform.LookAt(hitInfo.collider.gameObject.transform);
+							}
 						}
 					}
 				}
@@ -92,19 +102,23 @@ public class BlockPlacer : MonoBehaviour
 
 	void OnGUI()
 	{
-		if (GUI.Button(new Rect(0, 0, 100, 100), "Block!"))
+		if (GUI.Button(new Rect(0, 0, 150, 100), "Block!"))
 		{
 			currentObject = blockPrefab;
 		}
-		if (GUI.Button(new Rect(0, 100, 100, 100), "Static Wheel"))
+		if (GUI.Button(new Rect(0, 100, 150, 100), "Static Wheel"))
 		{
 			currentObject = staticWheelPrefab;
 		}
-		if (GUI.Button(new Rect(0, 200, 100, 100), "Directional Wheel"))
+		if (GUI.Button(new Rect(0, 200, 150, 100), "Directional Wheel"))
 		{
 			currentObject = directionalWheelPrefab;
 		}
-		if (GUI.Button(new Rect(0, 300, 100, 100), "Ready!"))
+		if (GUI.Button(new Rect(0, 300, 150, 100), "Remove Component"))
+		{
+			currentObject = null;
+		}
+		if (GUI.Button(new Rect(0, 400, 150, 100), "Ready!"))
 		{
 			DontDestroyOnLoad(vehicle);
 			Application.LoadLevel("game");
