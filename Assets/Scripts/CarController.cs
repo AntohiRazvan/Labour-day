@@ -55,6 +55,7 @@ public class CarController : MonoBehaviour
 			Vector3 position;
 			Quaternion rotation;
 			Wheels[i].GetWorldPose(out position, out rotation);
+			WheelMeshes[i].transform.position = position;
 			WheelMeshes[i].transform.rotation = rotation;
 		}
 
