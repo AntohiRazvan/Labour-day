@@ -11,6 +11,8 @@ public class BlockPlacer : MonoBehaviour
 	GameObject staticWheelPrefab;
 	[SerializeField]
 	GameObject cannonPrefab;
+	[SerializeField]
+	GameObject lookAtPosition;
 	GameObject currentObject;
 	GameObject vehicle;
 	float blockSize;
@@ -30,19 +32,22 @@ public class BlockPlacer : MonoBehaviour
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			if (Physics.Raycast(ray, out hitInfo))
 			{
-				if (hitInfo.collider.gameObject.tag == "Block")
+				if (currentObject == null)
 				{
-					Vector3 buildPosition = getBuildPosition(hitInfo.collider.gameObject.transform.position, hitInfo.point);
-					if (buildPosition != Vector3.zero)
+					if (hitInfo.collider.gameObject.name != "Root" &&
+						 (hitInfo.collider.gameObject.tag == "Block" || 
+						  hitInfo.collider.gameObject.tag == "Wheel" || 
+						  hitInfo.collider.gameObject.tag == "Gun"))
 					{
-						if (currentObject == null) 
-						{
-							if (hitInfo.collider.gameObject.name != "Root")
-							{
-								Destroy(hitInfo.collider.gameObject);
-							}
-						}
-						else
+						Destroy(hitInfo.collider.gameObject);
+					}
+				}
+				else
+				{
+					if (hitInfo.collider.gameObject.tag == "Block")
+					{
+						Vector3 buildPosition = getBuildPosition(hitInfo.collider.gameObject.transform.position, hitInfo.point);
+						if (buildPosition != Vector3.zero)
 						{
 							GameObject go = (GameObject)Instantiate(currentObject, buildPosition, Quaternion.identity);
 							go.transform.parent = vehicle.transform;

@@ -18,6 +18,11 @@ public class CarController : MonoBehaviour
 
 	void Start () 
 	{
+		var guns = GetComponentsInChildren<ConnonController>();
+		foreach(var gun in guns)
+		{
+			gun.enabled = true;
+		}
 		rigidbody = GetComponent<Rigidbody>();
 		directionalWheels = new List<WheelCollider>();
 		Wheels = new List<WheelCollider>();
