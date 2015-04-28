@@ -95,8 +95,17 @@ public class BlockPlacer : MonoBehaviour
 			minDistance = distance;
 			ret = objectPosition + new Vector3(0, 0, -blockSize);
 		}
-		if (Physics.OverlapSphere(ret, 0.2f).Length > 0)
-			return Vector3.zero;
+		if (currentObject == directionalWheelPrefab || currentObject == staticWheelPrefab)
+		{
+			if (Physics.OverlapSphere(ret, 0.35f).Length > 1)
+				return Vector3.zero;
+		}
+		else 
+		{
+			if (Physics.OverlapSphere(ret, 0.24f).Length > 0)
+				return Vector3.zero;
+		}
+
 		return ret;
 	}
 
