@@ -9,6 +9,8 @@ public class BlockPlacer : MonoBehaviour
 	GameObject directionalWheelPrefab;
 	[SerializeField]
 	GameObject staticWheelPrefab;
+	[SerializeField]
+	GameObject cannonPrefab;
 	GameObject currentObject;
 	GameObject vehicle;
 	float blockSize;
@@ -44,7 +46,7 @@ public class BlockPlacer : MonoBehaviour
 						{
 							GameObject go = (GameObject)Instantiate(currentObject, buildPosition, Quaternion.identity);
 							go.transform.parent = vehicle.transform;
-							if (currentObject.name.ToLower().Contains("wheel"))
+							if (currentObject.name.ToLower().Contains("wheel") || currentObject.name.ToLower().Contains("gun"))
 							{
 								go.transform.LookAt(hitInfo.collider.gameObject.transform);
 							}
@@ -111,7 +113,7 @@ public class BlockPlacer : MonoBehaviour
 
 	void OnGUI()
 	{
-		if (GUI.Button(new Rect(0, 0, 150, 100), "Block!"))
+		if (GUI.Button(new Rect(0, 0, 150, 100), "Block"))
 		{
 			currentObject = blockPrefab;
 		}
@@ -123,11 +125,15 @@ public class BlockPlacer : MonoBehaviour
 		{
 			currentObject = directionalWheelPrefab;
 		}
-		if (GUI.Button(new Rect(0, 300, 150, 100), "Remove Component"))
+		if (GUI.Button(new Rect(0, 300, 150, 100), "Beer Cannon"))
+		{
+			currentObject = cannonPrefab;
+		}
+		if (GUI.Button(new Rect(0, 400, 150, 100), "Remove Component"))
 		{
 			currentObject = null;
 		}
-		if (GUI.Button(new Rect(0, 400, 150, 100), "Ready!"))
+		if (GUI.Button(new Rect(0, 500, 150, 100), "Ready!"))
 		{
 			DontDestroyOnLoad(vehicle);
 			Application.LoadLevel("game");
