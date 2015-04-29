@@ -30,6 +30,7 @@ public class LaserBeam : MonoBehaviour
 
 	void OnCollisionEnter(Collision col)
 	{
+		Debug.Log(col.collider.gameObject.name);
 		Health health = col.collider.gameObject.GetComponent<Health>();
 		if (health != null)
 		{

@@ -14,12 +14,19 @@ public class GameManager : MonoBehaviour
 	float lastSpawn = 0;
 	bool bossSpawned = false;
 	
+	void Start()
+	{
+		Instantiate(AIPrefab, GetSpawnPosition(), Quaternion.identity);
+	}
+
 	void Update () 
 	{
 		if(lastSpawn + spawnInterval < Time.time)
 		{
 			lastSpawn = Time.time;
 			Instantiate(AIPrefab, GetSpawnPosition(), Quaternion.identity);
+			if(spawnInterval > 4.0f)
+				spawnInterval -= 1f;
 		}
 		if(!bossSpawned && Time.time > bossSpawn)
 		{

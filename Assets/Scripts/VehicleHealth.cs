@@ -21,6 +21,8 @@ public class VehicleHealth : MonoBehaviour
 	{
 		if (ammount < 0)
 		{
+			Instantiate(Resources.Load("Prefabs/Explosion"), transform.position, Quaternion.identity);
+
 			if (gameObject.tag == "Player" && !gameOver)
 			{
 				gameOver = true;

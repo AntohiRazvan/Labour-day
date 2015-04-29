@@ -83,7 +83,6 @@ public class CarController : MonoBehaviour, VehicleController
 
 	void OnGameOver()
 	{
-		Instantiate(Resources.Load("Prefabs/Explosion"), transform.position, Quaternion.identity);
 		StartCoroutine(Pause(2));
 		Destroy(gameObject, 0.2f);
 

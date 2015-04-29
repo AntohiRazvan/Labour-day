@@ -9,8 +9,6 @@ public class Health : MonoBehaviour
 	
 	void Awake()
 	{
-		if (transform.root.name == "Boss")
-			Debug.Log(transform.root.name);
 		vehicleHealth = transform.root.GetComponent<VehicleHealth>();
 	}
 

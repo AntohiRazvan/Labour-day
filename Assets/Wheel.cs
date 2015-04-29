@@ -11,6 +11,6 @@ public class Wheel : MonoBehaviour
 
 	void OnDestroy()
 	{
-		vehicleController.RemoveWheel(gameObject);
+		//vehicleController.RemoveWheel(gameObject);
 	}
 }
