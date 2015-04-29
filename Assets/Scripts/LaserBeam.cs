@@ -7,6 +7,8 @@ public class LaserBeam : MonoBehaviour
 	float speed = 5f;
 	[SerializeField]
 	float lifeSpan = 10f;
+	[SerializeField]
+	int damage = 15;
 	float creationTime;
 	float enableColliderDelay = 0.5f;
 
@@ -28,6 +30,11 @@ public class LaserBeam : MonoBehaviour
 
 	void OnCollisionEnter(Collision col)
 	{
+		Health health = col.collider.gameObject.GetComponent<Health>();
+		if (health != null)
+		{
+			health.takeDmage(damage);
+		}
 		Destroy(gameObject);
 	}
 }

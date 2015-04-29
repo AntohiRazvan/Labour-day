@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class AIVehicleController : MonoBehaviour 
+public class AIVehicleController : MonoBehaviour , VehicleController
 {
 	[SerializeField]
 	float motorTorque;
@@ -11,10 +11,10 @@ public class AIVehicleController : MonoBehaviour
 	[SerializeField]
 	float brakeTorque;
 
+	public List<WheelCollider> directionalWheels { get; set; }
+	public List<WheelCollider> Wheels { get; set; }
+	public List<GameObject> WheelMeshes { get; set; }
 	Rigidbody rigidbody;
-	List<WheelCollider> directionalWheels;
-	List<WheelCollider> Wheels;
-	List<GameObject> WheelMeshes;
 	GameObject target;
 
 	float horizontalInputDelay = 0.5f;
@@ -29,7 +29,7 @@ public class AIVehicleController : MonoBehaviour
 		var guns = GetComponentsInChildren<ConnonController>();
 		foreach (var gun in guns)
 		{
-			gun.enabled = true;
+			gun.enabled = false;
 		}
 		rigidbody = GetComponent<Rigidbody>();
 		directionalWheels = new List<WheelCollider>();
@@ -51,26 +51,29 @@ public class AIVehicleController : MonoBehaviour
 	{
 		float verticalInput = getVerticalInput();
 		float horizontalInput = getHorizontalInput();
-		Debug.Log(horizontalInput);
 
 		for (int i = 0; i < Wheels.Count; i++)
 		{
-			Wheels[i].brakeTorque = 0;
-			if (applyBrake)
+			if (WheelMeshes[i] != null)
 			{
-				Wheels[i].brakeTorque = brakeTorque;
+				Wheels[i].brakeTorque = 0;
+				if (applyBrake)
+				{
+					Wheels[i].brakeTorque = brakeTorque;
+				}
+				Wheels[i].motorTorque = verticalInput * motorTorque;
+				Vector3 position;
+				Quaternion rotation;
+				Wheels[i].GetWorldPose(out position, out rotation);
+				WheelMeshes[i].transform.position = position;
+				WheelMeshes[i].transform.rotation = rotation;
 			}
-			Wheels[i].motorTorque = verticalInput * motorTorque;
-			Vector3 position;
-			Quaternion rotation;
-			Wheels[i].GetWorldPose(out position, out rotation);
-			WheelMeshes[i].transform.position = position;
-			WheelMeshes[i].transform.rotation = rotation;
 		}
 
 		foreach (var wheel in directionalWheels)
 		{
-			wheel.steerAngle = horizontalInput * steerAngle;
+			if(wheel != null)
+				wheel.steerAngle = horizontalInput * steerAngle;
 		}
 	}
 
@@ -80,7 +83,6 @@ public class AIVehicleController : MonoBehaviour
 		if (lastHorizontalInput + horizontalInputDelay < Time.time)
 		{
 			float currentAngle = Vector3.Angle(transform.forward, target.transform.position);
-			//Debug.Log(currentAngle);
 			if (currentAngle > 2f)
 			{
 				if (direction < 0.01f && direction > 0.01f)
@@ -108,5 +110,13 @@ public class AIVehicleController : MonoBehaviour
 		}
 		applyBrake = true;
 		return 0;
+	}
+
+	public void RemoveWheel(GameObject wheel)
+	{
+		WheelCollider wheelCollider = wheel.GetComponentInChildren<WheelCollider>();
+		Wheels.Remove(wheelCollider);
+		directionalWheels.Remove(wheelCollider);
+		WheelMeshes.Remove(wheel);
 	}
 }

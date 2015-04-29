@@ -141,7 +141,7 @@ public class BlockPlacer : MonoBehaviour
 		if (GUI.Button(new Rect(0, 500, 150, 100), "Ready!"))
 		{
 			DontDestroyOnLoad(vehicle);
-			Application.LoadLevel("game");
+			Application.LoadLevel("singleplayer");
 		}
 	}
 }
